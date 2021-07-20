@@ -23,7 +23,7 @@ function CreateListing() {
         // e.preventDefault();
         console.log('fetching')
         const token = Cookies.get('XSRF-TOKEN')
-        const res = await fetch('/listing/create', {
+        const res = await csrfFetch('/listing/create', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -43,7 +43,7 @@ function CreateListing() {
             })
         })
         const json = res.json()
-        // if (json.ok) Redirect('/') //make this redirect to new listing page to add images
+        if (json.ok) Redirect(`/listing/${json.id}`) //make this redirect to new listing page to add images
 
     }
 

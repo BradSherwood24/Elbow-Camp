@@ -9,6 +9,7 @@ import Navigation from "./components/Navigation";
 import HomePage from "./components/Home";
 import CreateListing from "./components/CreateListingPage";
 import Profile from "./components/Profile"
+import SingleListing from './components/SingleListing'
 
 function App() {
   const dispatch = useDispatch();
@@ -30,6 +31,9 @@ function App() {
           </Route>
           <Route path='/new-listing'>
             <CreateListing />
+          </Route>
+          <Route path='/listing/:id'>
+            <SingleListing />
           </Route>
           <Route path="/login">
             <LoginFormPage />

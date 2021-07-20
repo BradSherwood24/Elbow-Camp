@@ -9,11 +9,11 @@ router.post('/create', asyncHandler(async (req, res) => {
     const { title, userId, type, address, city, state, country, price } = req.body;
     // const typeId = await Type.findOne({ where: { type } })
     // typeId = typeId.id
-    await Listing.create({ title, userId, typeId: 1, address, city, state, country, price });
+    const newListing = await Listing.create({ title, userId, typeId: 1, address, city, state, country, price });
 
     // setTokenCookie(res, listing)
     return res.json({
-        listing: 'success',
+        listing: newListing,
     });
 }));
 
@@ -25,10 +25,13 @@ router.get('/', asyncHandler(async (req, res) => {
     });
 }));
 
-router.get('/types', asyncHandler(async (req, res) => {
-    console.log(await Listing.findAll())
-    const types = await Type.findAll()
-    return res.json({ types })
+router.get('/:id', asyncHandler(async (req, res) => {
+    const id = req.params.id
+    const listing = await Listing.findByPk(id)
+    console.log(listing)
+    return res.json({
+        listing
+    })
 }))
 
 module.exports = router;
