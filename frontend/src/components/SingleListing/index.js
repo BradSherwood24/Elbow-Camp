@@ -16,12 +16,19 @@ function SingleListing() {
     }, [dispatch])
 
     const listing = useSelector(state => state.listing)
+    let listingArr
+    if (listing && !listing.listings) {
+        listingArr = Object.values(listing)
+    } else {
+        // dispatch(listingActions.fetchListing(Id))
+        window.location.reload()
+        listingArr = []
+    }
 
-    const listingArr = Object.values(listing)
 
     return (
         <div>
-            {!listingArr.length && <span>No produce available right now.</span>}
+            {!listingArr.length && <span>loading</span>}
             {listingArr.length && <span>
                 <h1>{listing.listing.title}</h1>
                 <div>
@@ -35,7 +42,7 @@ function SingleListing() {
                     <h3>price</h3>
                     <p>{listing.listing.price}</p>
                 </div>
-                </span>}
+            </span>}
         </div>
     )
 
