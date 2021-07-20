@@ -3,8 +3,10 @@ const router = express.Router();
 const csrf = require('csurf')
 const csrfProtection = csrf({ cookie: true })
 const apiRouter = require('./api');
+const listingRouter = require('./listings')
 
 router.use('/api', apiRouter);
+router.use('/listing', listingRouter)
 
 router.get('/hello/world', csrfProtection, function (req, res) {
     res.cookie('XSRF-TOKEN', req.csrfToken());
