@@ -8,6 +8,7 @@ import * as sessionActions from "./store/session";
 import Navigation from "./components/Navigation";
 import HomePage from "./components/Home";
 import CreateListing from "./components/CreateListingPage";
+import Profile from "./components/Profile"
 
 function App() {
   const dispatch = useDispatch();
@@ -23,6 +24,9 @@ function App() {
         <Switch>
           <Route exact path='/'>
             <HomePage />
+          </Route>
+          <Route exact path='/profile'>
+            <Profile />
           </Route>
           <Route path='/new-listing'>
             <CreateListing />

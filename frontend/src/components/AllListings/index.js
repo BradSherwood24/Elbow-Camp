@@ -7,10 +7,7 @@ function HomePage() {
 
 
     return (
-        <div>
-            <h1>hello from homepage</h1>
-            
-        </div>
+        <h1>hello from all listings page</h1>
     );
 }
 
