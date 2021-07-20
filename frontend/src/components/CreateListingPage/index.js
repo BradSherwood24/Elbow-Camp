@@ -1,16 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { csrfFetch } from '../../store/csrf';
 import Cookies from 'js-cookie';
+import * as listingActions from "../../store/listing";
 
 
 function CreateListing() {
+    const dispatch = useDispatch()
 
     const userId = useSelector(state => state.session.user.id)
 
     const [title, setTitle] = useState('');
-    const [type, setType] = useState('');
+    const [typeId, setTypeId] = useState(1);
     const [address, setAddress] = useState('');
     const [city, setCity] = useState('');
     const [state, setState] = useState('');
@@ -20,31 +22,9 @@ function CreateListing() {
     const [price, setPrice] = useState(100);
 
     const handleSubmit = async (e) => {
-        // e.preventDefault();
-        console.log('fetching')
-        const token = Cookies.get('XSRF-TOKEN')
-        const res = await csrfFetch('/listing/create', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'XSRF-Token': token
-            },
-            body: JSON.stringify({
-                title,
-                userId,
-                type,
-                address,
-                city,
-                state,
-                country,
-                lat,
-                long,
-                price
-            })
-        })
-        const json = res.json()
-        if (json.ok) Redirect(`/listing/${json.id}`) //make this redirect to new listing page to add images
-
+        e.preventDefault()
+        dispatch(listingActions.createListing({ title, userId, typeId, address, city, state, country, price }))
+        window.location = '/profile'
     }
 
     return (
@@ -61,14 +41,14 @@ function CreateListing() {
                 </label>
                 <label>Type of site
                     <select
-                        value={type}
-                        onChange={(e) => setType(e.target.value)}>
-                        <option value='Camp Ground'>Camp Ground</option>
-                        <option value='Woods'>Woods</option>
-                        <option value='Cabin'>Cabin</option>
-                        <option value='Tree house'>Tree house</option>
-                        <option value='Glamping'>Glamping</option>
-                        <option value='RV Park'>RV Park</option>
+                        value={typeId}
+                        onChange={(e) => setTypeId(e.target.value)}>
+                        <option value={1}>Camp Ground</option>
+                        <option value={2}>Woods</option>
+                        <option value={3}>Cabin</option>
+                        <option value={4}>Tree house</option>
+                        <option value={5}>Glamping</option>
+                        <option value={6}>RV Park</option>
                     </select>
                 </label>
                 <label>Address

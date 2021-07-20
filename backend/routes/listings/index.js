@@ -6,16 +6,28 @@ const { User, Listing, Image, Type } = require('../../db/models');
 
 router.post('/create', asyncHandler(async (req, res) => {
     console.log('in create listing')
-    const { title, userId, type, address, city, state, country, price } = req.body;
-    // const typeId = await Type.findOne({ where: { type } })
-    // typeId = typeId.id
-    const newListing = await Listing.create({ title, userId, typeId: 1, address, city, state, country, price });
+    const { title, userId, typeId, address, city, state, country, price } = req.body;
+    const listing = await Listing.create({ title, userId, typeId, address, city, state, country, price });
 
     // setTokenCookie(res, listing)
     return res.json({
-        listing: newListing,
+        listing
     });
 }));
+
+router.patch('/patch/:id', asyncHandler(async (req, res) => {
+    const { title, userId, type, address, city, state, country, price } = req.body;
+    const newListing = await Listing.create({ title, userId, typeId: 1, address, city, state, country, price });
+    const id = req.params.id
+    const listing = await Listing.findByPk(id)
+    listing.destroy()
+}))
+
+router.delete('/delete/:id', asyncHandler(async (req, res) => {
+    const id = req.params.id
+    const listing = await Listing.findByPk(id)
+    listing.destroy()
+}))
 
 router.get('/', asyncHandler(async (req, res) => {
     const listings = Listing.findAll()
@@ -28,7 +40,18 @@ router.get('/', asyncHandler(async (req, res) => {
 router.get('/:id', asyncHandler(async (req, res) => {
     const id = req.params.id
     const listing = await Listing.findByPk(id)
-    console.log(listing)
+    return res.json({
+        listing
+    })
+}))
+
+router.get('/user/:id', asyncHandler(async (req, res) => {
+    const id = req.params.id
+    const listing = await Listing.findAll({
+        where: {
+            userId: id
+        }
+    })
     return res.json({
         listing
     })

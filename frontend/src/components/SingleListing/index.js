@@ -3,26 +3,42 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
-import {getListing} from '../../store/listing'
+import { getListing } from '../../store/listing'
 import * as listingActions from "../../store/listing";
 
 function SingleListing() {
-    const Id = useParams()
-
+    const Id = useParams().id
+    const [isComponent, setIsComponent] = useState(false)
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(getListing({Id}))
+        dispatch(listingActions.fetchListing(Id))
     }, [dispatch])
 
     const listing = useSelector(state => state.listing)
-    console.log(listing)
+
+    const listingArr = Object.values(listing)
+
     return (
         <div>
-            <h1>hello from single listing</h1>
-            <h1>{listing.title}</h1>
+            {!listingArr.length && <span>No produce available right now.</span>}
+            {listingArr.length && <span>
+                <h1>{listing.listing.title}</h1>
+                <div>
+                    <h3>Address</h3>
+                    <p>{listing.listing.address}</p>
+                    <p>{listing.listing.city}</p>
+                    <p>{listing.listing.state}</p>
+                    <p>{listing.listing.country}</p>
+                </div>
+                <div>
+                    <h3>price</h3>
+                    <p>{listing.listing.price}</p>
+                </div>
+                </span>}
         </div>
-    );
+    )
+
 }
 
 export default SingleListing;
