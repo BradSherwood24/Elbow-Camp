@@ -27,14 +27,19 @@ router.delete('/delete/:id', asyncHandler(async (req, res) => {
     const id = req.params.id
     const listing = await Listing.findByPk(id)
     listing.destroy()
+    return res.json({
+        destroy: true
+    })
 }))
 
-router.get('/', asyncHandler(async (req, res) => {
-    const listings = Listing.findAll()
-
+router.get('/ten', asyncHandler(async (req, res) => {
+    const listing = await Listing.findAll({
+        orderBy: 'createdAt',
+        limit: 10
+    })
     return res.json({
-        listings,
-    });
+        listing
+    })
 }));
 
 router.get('/:id', asyncHandler(async (req, res) => {

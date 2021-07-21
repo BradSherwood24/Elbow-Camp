@@ -8,7 +8,6 @@ import * as listingActions from "../../store/listing";
 
 function SingleListing() {
     const Id = useParams().id
-    const [isComponent, setIsComponent] = useState(false)
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -17,12 +16,9 @@ function SingleListing() {
 
     const listing = useSelector(state => state.listing)
     let listingArr
-    if (listing && !listing.listings) {
+    if (listing.listing) {
         listingArr = Object.values(listing)
     } else {
-        setTimeout(() => {
-            window.location.reload()
-        }, 1000)
         listingArr = []
     }
 

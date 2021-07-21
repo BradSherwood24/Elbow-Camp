@@ -18,9 +18,10 @@ export const addListing = (NewListing) => ({
     NewListing
 });
 
-export const getListings = (listings) => ({
+export const getListings = (listings, isHome) => ({
     type: GET_LISTINGS,
-    listings
+    listings,
+    isHome
 })
 
 
@@ -34,8 +35,23 @@ export const fetchListing = (id) => async (dispatch) => {
 export const fetchListings = (id) => async (dispatch) => {
     const res = await csrfFetch(`/listing/user/${id}`)
     const listings = await res.json()
-    dispatch(getListings(listings))
+    dispatch(getListings(listings, false))
     return listings
+}
+
+export const fetchAllListings = () => async (dispatch) => {
+    const res = await csrfFetch(`/listing/ten`)
+    const listings = await res.json()
+    dispatch(getListings(listings, true))
+    return listings
+}
+
+export const deleteListing = (id) => async (dispatch) => {
+    const res = await csrfFetch(`/listing/delete/${id}`, {
+        method: "DELETE"
+    })
+    const json = await res.json()
+    return json
 }
 
 export const createListing = (listing) => async (dispatch) => {
@@ -81,6 +97,7 @@ const listingReducer = (state = {}, action) => {
         case GET_LISTINGS:
             newState = Object.assign({}, state);
             newState.listings = action.listings.listing;
+            newState.isHome = action.isHome;
             return newState;
         default:
             return state;

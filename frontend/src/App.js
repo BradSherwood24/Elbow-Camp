@@ -10,6 +10,7 @@ import HomePage from "./components/Home";
 import CreateListing from "./components/CreateListingPage";
 import Profile from "./components/Profile"
 import SingleListing from './components/SingleListing'
+import EditListing from "./components/EditPage";
 
 function App() {
   const dispatch = useDispatch();
@@ -34,6 +35,9 @@ function App() {
           </Route>
           <Route path='/listing/:id'>
             <SingleListing />
+          </Route>
+          <Route path='/edit/:id'>
+            <EditListing />
           </Route>
           <Route path="/login">
             <LoginFormPage />

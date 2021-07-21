@@ -6,16 +6,10 @@ import { csrfFetch } from '../../store/csrf';
 import * as listingActions from "../../store/listing";
 
 
-// const fetchListings = async (id) => {
-//     const res = await csrfFetch(`/listing/user/${id}`)
-//     const json = await res.json
-//     return json
-// }
-
 function Profile() {
+    const dispatch = useDispatch()
     const userId = useSelector(state => state.session.user.id)
     const [isComponent, setIsComponent] = useState(false)
-    const dispatch = useDispatch()
 
     useEffect(() => {
         dispatch(listingActions.fetchListings(userId))
@@ -23,13 +17,15 @@ function Profile() {
 
     let listings = useSelector(state => state.listing)
     let listingArrs
-    if (listings && !listings.listing) {
+    if (!listings.isHome) {
         listingArrs = Object.values(listings)
     } else {
-        setTimeout(() => {
-            window.location.reload()
-        }, 1000)
         listingArrs = []
+    }
+
+    const deleteListing = (id) => {
+        dispatch(listingActions.deleteListing(id))
+        window.location.reload()
     }
 
 
@@ -39,23 +35,34 @@ function Profile() {
             <NavLink to='/new-listing'>create a listing</NavLink>
             {!listingArrs.length && <span>You have no listings</span>}
             {listingArrs.length && listings.listings.map((listing) =>
-            <span>
-                <h1>{listing.title}</h1>
-                <div>
-                    <h3>Address</h3>
-                    <p>{listing.address}</p>
-                    <p>{listing.city}</p>
-                    <p>{listing.state}</p>
-                    <p>{listing.country}</p>
-                </div>
-                <div>
-                    <h3>price</h3>
-                    <p>{listing.price}</p>
-                </div>
-                <button>
-                    <NavLink to={`/listing/${listing.id}`}>go to listing</NavLink>
-                </button>
-            </span>)}
+                <span>
+                    <h1>{listing.title}</h1>
+                    <div>
+                        <h3>Address</h3>
+                        <p>{listing.address}</p>
+                        <p>{listing.city}</p>
+                        <p>{listing.state}</p>
+                        <p>{listing.country}</p>
+                    </div>
+                    <div>
+                        <h3>price</h3>
+                        <p>{listing.price}</p>
+                    </div>
+                    <button>
+                        <NavLink to={`/listing/${listing.id}`}>go to listing</NavLink>
+                    </button>
+                    <form>
+                        <label>add images</label>
+                        <input type='text'></input>
+                        <button type='submit'>submit</button>
+                    </form>
+                    <button
+                        onClick={(e) => deleteListing(listing.id)}
+                    >Delete</button>
+                    <button>
+                        <NavLink to={`/edit/${listing.id}`}>edit</NavLink>
+                    </button>
+                </span>)}
         </div>
     );
 }
