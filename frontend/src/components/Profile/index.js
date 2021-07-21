@@ -26,7 +26,9 @@ function Profile() {
     if (listings && !listings.listing) {
         listingArrs = Object.values(listings)
     } else {
-        dispatch(listingActions.fetchListings(userId))
+        setTimeout(() => {
+            window.location.reload()
+        }, 1000)
         listingArrs = []
     }
 

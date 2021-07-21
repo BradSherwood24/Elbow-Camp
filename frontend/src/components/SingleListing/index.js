@@ -20,8 +20,9 @@ function SingleListing() {
     if (listing && !listing.listings) {
         listingArr = Object.values(listing)
     } else {
-        // dispatch(listingActions.fetchListing(Id))
-        window.location.reload()
+        setTimeout(() => {
+            window.location.reload()
+        }, 1000)
         listingArr = []
     }
 
