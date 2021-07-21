@@ -34,7 +34,10 @@ router.get('/ten', asyncHandler(async (req, res) => {
     const listing = await Listing.findAll({
         orderBy: 'createdAt',
         limit: 10,
-        include: Review, Image
+        include: [
+            {model: Image},
+            {model: Review}
+        ]
     })
     return res.json({
         listing
@@ -44,7 +47,11 @@ router.get('/ten', asyncHandler(async (req, res) => {
 router.get('/:id', asyncHandler(async (req, res) => {
     const id = req.params.id
     const listing = await Listing.findByPk(id, {
-        include: Review
+        include: [
+            {model: Image},
+            {model: Review,
+            include: User}
+        ]
     })
     return res.json({
         listing
@@ -57,7 +64,10 @@ router.get('/user/:id', asyncHandler(async (req, res) => {
         where: {
             userId: id
         },
-        include: Review
+        include: [
+            {model: Image},
+            {model: Review}
+        ]
     })
     return res.json({
         listing

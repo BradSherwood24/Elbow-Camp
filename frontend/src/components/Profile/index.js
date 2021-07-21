@@ -9,7 +9,7 @@ import * as listingActions from "../../store/listing";
 function Profile() {
     const dispatch = useDispatch()
     const userId = useSelector(state => state.session.user.id)
-    const [isComponent, setIsComponent] = useState(false)
+    const [image, setImage] = useState('')
 
     useEffect(() => {
         dispatch(listingActions.fetchListings(userId))
@@ -29,6 +29,7 @@ function Profile() {
     }
 
 
+
     return (
         <div>
             <h1>hello from Profile</h1>
@@ -37,6 +38,12 @@ function Profile() {
             {listingArrs.length && listings.listings.map((listing) =>
                 <span>
                     <h1>{listing.title}</h1>
+                    {listing.Images.length &&
+                        <div>
+                            <img src={listing.Images[0].imgSrc}></img>
+                            {/* <button onClick={(e) => prevImg()}>{'<'}</button>
+                    <button onClick={(e) => nextImg()}>{'>'}</button> */}
+                        </div>}
                     <div>
                         <h3>Address</h3>
                         <p>{listing.address}</p>
@@ -51,11 +58,6 @@ function Profile() {
                     <button>
                         <NavLink to={`/listing/${listing.id}`}>go to listing</NavLink>
                     </button>
-                    <form>
-                        <label>add images</label>
-                        <input type='text'></input>
-                        <button type='submit'>submit</button>
-                    </form>
                     <button
                         onClick={(e) => deleteListing(listing.id)}
                     >Delete</button>

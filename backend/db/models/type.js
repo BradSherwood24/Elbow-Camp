@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
     type: DataTypes.STRING
   }, {});
   Types.associate = function(models) {
-    // associations can be defined here
+    // Type.hasMany(models.Listing, {foreignKey: 'typeId'})
   };
   return Types;
 };

@@ -24,6 +24,20 @@ function HomePage() {
         listingArrs = []
     }
 
+    // const prevImg = () => {
+    //     console.log(numberOfImages, imgNum)
+    //     if (imgNum >= 0){
+    //         setImgNum(imgNum - 1)
+    //     }
+    // }
+
+    // const nextImg = () => {
+    //     if (imgNum < numberOfImages){
+    //         console.log(numberOfImages, imgNum)
+    //         setImgNum(imgNum + 1)
+    //     }
+    // }
+
 
 
     return (
@@ -33,6 +47,12 @@ function HomePage() {
             {listingArrs.length && listings.listings.map((listing) =>
             <span>
                 <h1>{listing.title}</h1>
+                {listing.Images.length &&
+                <div>
+                    <img src={listing.Images[0].imgSrc}></img>
+                    {/* <button onClick={(e) => prevImg()}>{'<'}</button>
+                    <button onClick={(e) => nextImg()}>{'>'}</button> */}
+                </div>}
                 <div>
                     <h3>Address</h3>
                     <p>{listing.address}</p>
