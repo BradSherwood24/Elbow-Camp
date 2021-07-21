@@ -7,6 +7,8 @@ import * as listingActions from "../../store/listing";
 
 
 function HomePage() {
+    const user = useSelector(state => state.session.user)
+    if(!user) window.location = '/login'
     const userName = useSelector(state => state.session.user.username)
     const dispatch = useDispatch()
 
@@ -16,7 +18,11 @@ function HomePage() {
 
     let listingArrs
     let listings = useSelector(state => state.listing)
-    listingArrs = Object.values(listings)
+    if(listings.listings){
+        listingArrs = Object.values(listings)
+    }else {
+        listingArrs = []
+    }
 
 
 

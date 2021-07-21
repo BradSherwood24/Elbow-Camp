@@ -9,6 +9,8 @@ import * as listingActions from "../../store/listing";
 function SingleListing() {
     const Id = useParams().id
     const dispatch = useDispatch()
+    const [comment, setComment] = useState('')
+    const [rating, setRating] = useState(5)
 
     useEffect(() => {
         dispatch(listingActions.fetchListing(Id))
@@ -20,6 +22,10 @@ function SingleListing() {
         listingArr = Object.values(listing)
     } else {
         listingArr = []
+    }
+
+    const handleSubmit = () => {
+
     }
 
 
@@ -39,6 +45,31 @@ function SingleListing() {
                     <h3>price</h3>
                     <p>{listing.listing.price}</p>
                 </div>
+                <button>
+                    Book it
+                </button>
+                <form onSubmit={handleSubmit}>
+                    <h3>Review for {listing.listing.title}</h3>
+                    <label>Comment</label>
+                    <input
+                    type='text'
+                    value={comment}
+                    onChange={(e) => setComment(e.target.value)}
+                    required
+                    ></input>
+                    <label>Rating</label>
+                    <select
+                    value={rating}
+                    onChange={(e) => setRating(e.target.value)}
+                    >
+                        <option value={1}>1</option>
+                        <option value={1}>2</option>
+                        <option value={1}>3</option>
+                        <option value={1}>4</option>
+                        <option value={1}>5</option>
+                    </select>
+                    <button type='submit'>Add Review</button>
+                </form>
             </span>}
         </div>
     )

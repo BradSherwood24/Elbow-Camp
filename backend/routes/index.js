@@ -4,9 +4,13 @@ const csrf = require('csurf')
 const csrfProtection = csrf({ cookie: true })
 const apiRouter = require('./api');
 const listingRouter = require('./listings')
+const reviewRouter = require('./reviews')
+const imageRouter = require('./image')
 
 router.use('/api', apiRouter);
 router.use('/listing', listingRouter)
+router.use('/review', reviewRouter)
+router.use('/image', imageRouter)
 
 router.get('/hello/world', csrfProtection, function (req, res) {
     res.cookie('XSRF-TOKEN', req.csrfToken());

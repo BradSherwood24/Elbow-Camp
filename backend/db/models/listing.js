@@ -13,7 +13,9 @@ module.exports = (sequelize, DataTypes) => {
     price: DataTypes.DECIMAL
   }, {});
   Listing.associate = function(models) {
-    // associations can be defined here
+    Listing.hasMany(models.Review, {foreignKey: 'spotId'})
+    Listing.hasMany(models.Image, {foreignKey: 'spotId'})
+    Listing.belongsTo(models.User, {foreignKey: 'userId'})
   };
   return Listing;
 };

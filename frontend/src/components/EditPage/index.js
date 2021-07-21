@@ -7,6 +7,7 @@ import { getListing } from '../../store/listing'
 import * as listingActions from "../../store/listing";
 
 function EditListing() {
+    const listing = useSelector(state => state.listing)
     const Id = useParams().id
     const dispatch = useDispatch()
     const userId = useSelector(state => state.session.user.id)
@@ -19,27 +20,56 @@ function EditListing() {
     const [lat, setlat] = useState('');
     const [long, setLong] = useState('');
     const [price, setPrice] = useState(100);
+    const [isLoaded, setIsLoaded] = useState(false)
+
+    let Title
+    let TypeId
+    let Address
+    let City
+    let State
+    let Country
+    let Lat
+    let Long
+    let Price
+
+    const fill = () => {
+        setTitle(Title);
+        setTypeId(typeId);
+        setAddress(Address);
+        setCity(City);
+        setState(State);
+        setCountry(Country);
+        setlat(Lat);
+        setLong(Long);
+        setPrice(Price);
+    }
 
     useEffect(() => {
         dispatch(listingActions.fetchListing(Id))
     }, [dispatch])
 
-    const listing = useSelector(state => state.listing)
-    let listingArrs =[]
+    useEffect(() => {
+        fill()
+    }, [listing])
+
+
+
+    let listingArrs = []
     if (listing.listing) {
         listingArrs = Object.values(listing)
+        Title = listing.listing.title
+        TypeId = listing.listing.typeId
+        Address = listing.listing.address
+        City = listing.listing.city
+        State = listing.listing.state
+        Country = listing.listing.country
+        Lat = listing.listing.lat
+        Long = listing.listing.long
+        Price = listing.listing.price
     } else {
         listingArrs = []
     }
-    // setTitle(listing.listing.title);
-    // setTypeId(listing.listing.typeId);
-    // setAddress(listing.listing.address);
-    // setCity(listing.listing.city);
-    // setState(listing.listing.state);
-    // setCountry(listing.listing.country);
-    // setlat(listing.listing.lat);
-    // setLong(listing.listing.long);
-    // setPrice(listing.listing.price);
+
 
 
 
@@ -117,7 +147,7 @@ function EditListing() {
                             required
                         />
                     </label>
-                    <button type='submit'>submit</button>
+                    <button type='submit'>Update</button>
                 </form>
             }
         </div>
