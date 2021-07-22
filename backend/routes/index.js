@@ -6,11 +6,13 @@ const apiRouter = require('./api');
 const listingRouter = require('./listings')
 const reviewRouter = require('./reviews')
 const imageRouter = require('./image')
+const bookingRouter = require('./bookings')
 
 router.use('/api', apiRouter);
 router.use('/listing', listingRouter)
 router.use('/review', reviewRouter)
 router.use('/image', imageRouter)
+router.use('/booking', bookingRouter)
 
 router.get('/hello/world', csrfProtection, function (req, res) {
     res.cookie('XSRF-TOKEN', req.csrfToken());

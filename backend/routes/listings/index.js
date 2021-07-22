@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router();
 const asyncHandler = require('express-async-handler');
 const { setTokenCookie } = require('../../utils/auth.js');
-const { User, Listing, Image, Type, Review } = require('../../db/models');
+const { User, Listing, Image, Type, Review, Booking } = require('../../db/models');
 
 router.post('/create', asyncHandler(async (req, res) => {
     console.log('in create listing')
@@ -35,8 +35,9 @@ router.get('/ten', asyncHandler(async (req, res) => {
         orderBy: 'createdAt',
         limit: 10,
         include: [
-            {model: Image},
-            {model: Review}
+            { model: Image },
+            { model: Review },
+            { model: Booking }
         ]
     })
     return res.json({
@@ -48,9 +49,12 @@ router.get('/:id', asyncHandler(async (req, res) => {
     const id = req.params.id
     const listing = await Listing.findByPk(id, {
         include: [
-            {model: Image},
-            {model: Review,
-            include: User}
+            { model: Image },
+            { model: Booking },
+            {
+                model: Review,
+                include: User
+            },
         ]
     })
     return res.json({
@@ -65,8 +69,9 @@ router.get('/user/:id', asyncHandler(async (req, res) => {
             userId: id
         },
         include: [
-            {model: Image},
-            {model: Review}
+            { model: Image },
+            { model: Review },
+            { model: Booking }
         ]
     })
     return res.json({

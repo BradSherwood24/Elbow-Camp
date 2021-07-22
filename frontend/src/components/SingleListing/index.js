@@ -6,6 +6,8 @@ import { useParams } from 'react-router-dom';
 import { getListing } from '../../store/listing'
 import * as listingActions from "../../store/listing";
 import { csrfFetch } from '../../store/csrf';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import './index.css'
 
 
@@ -21,6 +23,9 @@ function SingleListing() {
     const [updateComment, setUpdateComment] = useState('')
     const [updateRating, setUpdateRating] = useState(5)
     const [bookIt, setBookIt] = useState(false)
+    const [startDate, setStartDate] = useState(new Date())
+    const [endDate, setEndDate] = useState(new Date())
+    const [yourBooking, setYourBooking] = useState({})
 
     useEffect(() => {
         dispatch(listingActions.fetchListing(Id))
@@ -36,6 +41,29 @@ function SingleListing() {
     }
 
     const handleSubmit = () => {
+    }
+
+    const createBooking = async (e) => {
+        const spotId = Id
+        const res = await csrfFetch(`/booking`, {
+            method: 'POST',
+            body: JSON.stringify({ userId, spotId, startDate, endDate })
+        })
+    }
+
+    const updateBooking = async (id) => {
+        const spotId = Id
+        const res = await csrfFetch(`/booking/${id}`, {
+            method: 'PATCH',
+            body: JSON.stringify({ userId, spotId, startDate, endDate })
+        })
+    }
+
+    const deleteBooking = async (id) => {
+        console.log(id)
+        const res = await csrfFetch(`/booking/${id}`, {
+            method: 'DELETE',
+        })
     }
 
     const addReview = async () => {
@@ -135,31 +163,65 @@ function SingleListing() {
                     <h3>price</h3>
                     <p>{listing.listing.price}</p>
                 </div>
-                {bookIt &&
+                {!listing.listing.Bookings.find((booking) => booking.userId === userId) &&
                     <div>
-                        <h3>were booking it now</h3>
-                        <form>
-                            <label>Start Date</label>
-                            <input
-                            type='date'
-                            >
-                            </input>
-                            <label>End Date</label>
-                            <input
-                            type='date'
-                            >
-                            </input>
-                        </form>
-                        <button onClick={(e) => setBookIt(false)}>
-                            Don't Book it
-                        </button>
+                        {bookIt &&
+                            <div>
+                                <form onSubmit={(e) => createBooking(e)}>
+                                    <label>Start Date</label>
+                                    <DatePicker
+                                        selected={startDate}
+                                        onChange={(date) => setStartDate(date)}
+                                    >
+                                    </DatePicker>
+                                    <label>End Date</label>
+                                    <DatePicker
+                                        selected={endDate}
+                                        onChange={(date) => setEndDate(date)}
+                                    >
+                                    </DatePicker>
+                                    <button type='submit'>Book it</button>
+                                </form>
+                                <button onClick={(e) => setBookIt(false)}>
+                                    Don't Book it
+                                </button>
+                            </div>
+                        }
+                        {!bookIt &&
+                            <div>
+                                <button onClick={(e) => setBookIt(true)}>
+                                    Book it
+                                </button>
+                            </div>
+                        }
                     </div>
                 }
-                {!bookIt &&
+                {listing.listing.Bookings.find((booking) => booking.userId === userId) &&
                     <div>
-                        <button onClick={(e) => setBookIt(true)}>
-                            Book it
-                        </button>
+                        <h2>Your Booking:</h2>
+                        <h3>Start Date</h3>
+                        <h4>{new Date(listing.listing.Bookings.find((booking) => booking.userId === userId).startDate).toDateString()}</h4>
+                        <h3>End Date</h3>
+                        <h4>{new Date(listing.listing.Bookings.find((booking) => booking.userId === userId).endDate).toDateString()}</h4>
+                        <form
+                            onSubmit={(e) => updateBooking(listing.listing.Bookings.find((booking) => booking.userId === userId).id)}
+                        >
+                            <label>Start Date</label>
+                            <DatePicker
+                                selected={startDate}
+                                onChange={(date) => setStartDate(date)}
+                            >
+                            </DatePicker>
+                            <label>End Date</label>
+                            <DatePicker
+                                selected={endDate}
+                                onChange={(date) => setEndDate(date)}
+                            >
+                            </DatePicker>
+
+                            <button type='submit'>Update Booking</button>
+                        </form>
+                        <button onClick={(e) => deleteBooking(listing.listing.Bookings.find((booking) => booking.userId === userId).id)}>Delete Booking</button>
                     </div>
                 }
                 {!listing.listing.Reviews.find((review) => review.userId === userId) &&

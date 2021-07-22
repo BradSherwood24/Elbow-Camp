@@ -4,6 +4,7 @@ import { Redirect } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 import { csrfFetch } from '../../store/csrf';
 import * as listingActions from "../../store/listing";
+import OneListing from '../oneListing';
 
 
 function HomePage() {
@@ -49,7 +50,7 @@ function HomePage() {
                 <h1>{listing.title}</h1>
                 {listing.Images.length &&
                 <div>
-                    <img src={listing.Images[0].imgSrc}></img>
+                    <img className='Image' src={listing.Images[0].imgSrc}></img>
                     {/* <button onClick={(e) => prevImg()}>{'<'}</button>
                     <button onClick={(e) => nextImg()}>{'>'}</button> */}
                 </div>}

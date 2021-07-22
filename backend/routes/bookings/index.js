@@ -14,10 +14,20 @@ router.get('/all/:id', asyncHandler(async (req, res) => {
     });
 }))
 
-router.post('/:id', asyncHandler(async (req, res) => {
-    const spotId = req.params.id
+router.post('/', asyncHandler(async (req, res) => {
     const { spotId, userId, startDate, endDate} = req.body
     const booking = await Booking.create({ spotId, userId, startDate, endDate})
+    return res.json({
+        booking,
+    });
+}))
+
+router.patch('/:id', asyncHandler(async (req, res) => {
+    const Id = req.params.id
+    const { spotId, userId, startDate, endDate} = req.body
+    const booking = await Booking.create({ spotId, userId, startDate, endDate})
+    const oldBooking = await Booking.findByPk(Id)
+    oldBooking.destroy()
     return res.json({
         booking,
     });
@@ -32,5 +42,11 @@ router.delete('/:id', asyncHandler(async (req, res) => {
     });
 }))
 
+
+router.get('/', asyncHandler(async (req, res) => {
+    return res.json({
+        hello: 'hello',
+    });
+}))
 
 module.exports = router;
