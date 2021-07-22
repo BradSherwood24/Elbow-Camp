@@ -1,0 +1,76 @@
+.smallImage {
+    width: 100px;
+    height: 75px;
+    margin: 2px;
+}
+
+.returnDiv {
+    display: grid;
+    grid-template-rows: max-content 1fr;
+    width: 700px;
+    /* background: linear-gradient(#40E0D0, #9cd3db); */
+    background: linear-gradient(#fd5e53, #FFC132);
+    margin: 10px;
+    padding: 15px;
+    align-self: center;
+    border: 1px solid black;
+    border-radius: 8px;
+}
+
+.Image {
+    object-fit: cover;
+    width: 100%;
+    height: 300px;
+    border: 1px solid black;
+}
+
+.imgSelect {
+    width: 40%;
+}
+
+.changeImg {
+    display: flex;
+    justify-content: space-between;
+}
+
+.title {
+    font-family: 'Encode Sans SC', sans-serif;
+    text-align: center;
+}
+
+.price {
+    font-size: 40px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.priceLabel {
+    margin-bottom: 0px;
+}
+
+.addressLabel{
+    margin-bottom: 0px;
+}
+
+h3 {
+    font-family: 'Lora', serif;
+}
+
+p {
+    font-family: 'Lora', serif;
+    padding: 2px;
+    margin: 2px;
+}
+
+.NavLink {
+    color: white;
+    text-align: center;
+}
+
+.toListing {
+    width: 200px;
+}
+.toListing {
+    display: flex;
+    justify-content: center;
+}

@@ -8,7 +8,7 @@ import * as listingActions from "../../store/listing";
 import { csrfFetch } from '../../store/csrf';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import './index.css'
+import './SingleListing.css'
 
 
 function SingleListing() {
@@ -25,7 +25,6 @@ function SingleListing() {
     const [bookIt, setBookIt] = useState(false)
     const [startDate, setStartDate] = useState(new Date())
     const [endDate, setEndDate] = useState(new Date())
-    const [yourBooking, setYourBooking] = useState({})
 
     useEffect(() => {
         dispatch(listingActions.fetchListing(Id))
@@ -113,6 +112,8 @@ function SingleListing() {
     const prevImg = () => {
         if (imgNum > 0) {
             setImgNum(imgNum - 1)
+        } else {
+            setImgNum(numberOfImages)
         }
     }
 
@@ -120,179 +121,192 @@ function SingleListing() {
         if (imgNum < numberOfImages) {
             console.log(numberOfImages, imgNum)
             setImgNum(imgNum + 1)
+        }else {
+            setImgNum(0)
         }
     }
 
 
     return (
-        <div>
-            {!listingArr.length && <span>loading</span>}
-            {listingArr.length && <span>
-                <h1>{listing.listing.title}</h1>
-                {listing.listing.Images.length &&
+        <div className='Containing'>
+            <div className='returnDiv'>
+                {!listingArr.length && <span>loading</span>}
+                {listingArr.length && <span>
+                    <h1 className='title'>{listing.listing.title}</h1>
+                    {listing.listing.Images.length &&
+                        <div>
+                            <img className='Image' src={listing.listing.Images[imgNum].imgSrc}></img>
+                            <button onClick={(e) => prevImg()}>{'<'}</button>
+                            <button onClick={(e) => nextImg()}>{'>'}</button>
+                            {userId === listing.listing.userId &&
+                                <button onClick={(e) => deleteImage(listing.listing.Images[imgNum].id)}>{'delete image'}</button>}
+                        </div>}
                     <div>
-                        <img className='Image' src={listing.listing.Images[imgNum].imgSrc}></img>
-                        <button onClick={(e) => prevImg()}>{'<'}</button>
-                        <button onClick={(e) => nextImg()}>{'>'}</button>
-                        {userId === listing.listing.userId &&
-                            <button onClick={(e) => deleteImage(listing.listing.Images[imgNum].id)}>{'delete image'}</button>}
-                    </div>}
-                {userId === listing.listing.userId && <div>
-                    <form
-                        onSubmit={(e) => { addImage(e) }}
-                    >
-                        <label>add images</label>
-                        <input
-                            type='text'
-                            value={image}
-                            onChange={(e) => setImage(e.target.value)}
-                            required
-                        ></input>
-                        <button type='submit'>submit</button>
-                    </form>
-                </div>
-                }
-                <div>
-                    <h3>Address</h3>
-                    <p>{listing.listing.address}</p>
-                    <p>{listing.listing.city}</p>
-                    <p>{listing.listing.state}</p>
-                    <p>{listing.listing.country}</p>
-                </div>
-                <div>
-                    <h3>price</h3>
-                    <p>{listing.listing.price}</p>
-                </div>
-                {!listing.listing.Bookings.find((booking) => booking.userId === userId) &&
-                    <div>
-                        {bookIt &&
-                            <div>
-                                <form onSubmit={(e) => createBooking(e)}>
-                                    <label>Start Date</label>
-                                    <DatePicker
-                                        selected={startDate}
-                                        onChange={(date) => setStartDate(date)}
-                                    >
-                                    </DatePicker>
-                                    <label>End Date</label>
-                                    <DatePicker
-                                        selected={endDate}
-                                        onChange={(date) => setEndDate(date)}
-                                    >
-                                    </DatePicker>
-                                    <button type='submit'>Book it</button>
-                                </form>
-                                <button onClick={(e) => setBookIt(false)}>
-                                    Don't Book it
-                                </button>
-                            </div>
-                        }
-                        {!bookIt &&
-                            <div>
-                                <button onClick={(e) => setBookIt(true)}>
-                                    Book it
-                                </button>
-                            </div>
-                        }
+                        {listing.listing.Images.map((image) => (
+                            <img className='smallImage' src={image.imgSrc}></img>
+                        ))}
                     </div>
-                }
-                {listing.listing.Bookings.find((booking) => booking.userId === userId) &&
-                    <div>
-                        <h2>Your Booking:</h2>
-                        <h3>Start Date</h3>
-                        <h4>{new Date(listing.listing.Bookings.find((booking) => booking.userId === userId).startDate).toDateString()}</h4>
-                        <h3>End Date</h3>
-                        <h4>{new Date(listing.listing.Bookings.find((booking) => booking.userId === userId).endDate).toDateString()}</h4>
+                    {userId === listing.listing.userId && <div>
                         <form
-                            onSubmit={(e) => updateBooking(listing.listing.Bookings.find((booking) => booking.userId === userId).id)}
+                            onSubmit={(e) => { addImage(e) }}
                         >
-                            <label>Start Date</label>
-                            <DatePicker
-                                selected={startDate}
-                                onChange={(date) => setStartDate(date)}
-                            >
-                            </DatePicker>
-                            <label>End Date</label>
-                            <DatePicker
-                                selected={endDate}
-                                onChange={(date) => setEndDate(date)}
-                            >
-                            </DatePicker>
-
-                            <button type='submit'>Update Booking</button>
+                            <label>add images</label>
+                            <input
+                                type='text'
+                                value={image}
+                                onChange={(e) => setImage(e.target.value)}
+                                required
+                            ></input>
+                            <button type='submit'>submit</button>
                         </form>
-                        <button onClick={(e) => deleteBooking(listing.listing.Bookings.find((booking) => booking.userId === userId).id)}>Delete Booking</button>
                     </div>
-                }
-                {!listing.listing.Reviews.find((review) => review.userId === userId) &&
-                    <form onSubmit={(e) => addReview()}>
-                        <h3>Add Review for {listing.listing.title}</h3>
-                        <label>Comment</label>
-                        <input
-                            type='text'
-                            value={comment}
-                            onChange={(e) => setComment(e.target.value)}
-                            required
-                        ></input>
-                        <label>Rating</label>
-                        <select
-                            value={rating}
-                            onChange={(e) => setRating(e.target.value)}
-                        >
-                            <option value={1}>1</option>
-                            <option value={2}>2</option>
-                            <option value={3}>3</option>
-                            <option value={4}>4</option>
-                            <option value={5}>5</option>
-                        </select>
-                        <button type='submit'>Add Review</button>
-                    </form>
-                }
-                {listing.listing.Reviews.length &&
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>User name</th>
-                                <th>Comment</th>
-                                <th>Rating</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {listing.listing.Reviews.map((review) => (
-                                <tr key={review.id}>
-                                    <td>{review.User.username}</td>
-                                    <td>{review.comment}</td>
-                                    <td>{review.rating}</td>
-                                    {review.userId === userId &&
-                                        <td>
-                                            <form onSubmit={(e) => updateReview(e, review.id)}>
-                                                <label>Update Comment</label>
-                                                <input
-                                                    type='text'
-                                                    value={updateComment}
-                                                    onChange={(e) => setUpdateComment(e.target.value)}
-                                                    required
-                                                ></input>
-                                                <label>Rating</label>
-                                                <select
-                                                    value={updateRating}
-                                                    onChange={(e) => setUpdateRating(e.target.value)}
-                                                >
-                                                    <option value={1}>1</option>
-                                                    <option value={2}>2</option>
-                                                    <option value={3}>3</option>
-                                                    <option value={4}>4</option>
-                                                    <option value={5}>5</option>
-                                                </select>
-                                                <button type='submit'>Update Review</button>
-                                            </form>
-                                            <button onClick={(e) => deleteReview(review.id)}>delete</button>
-                                        </td>}
+                    }
+                    <div>
+                        <h3 className='address'>Address</h3>
+                        <p>{listing.listing.address}, {listing.listing.city}, {listing.listing.state}, {listing.listing.country}</p>
+                        {/* <p>{listing.listing.address}</p>
+                        <p>{listing.listing.city}</p>
+                        <p>{listing.listing.state}</p>
+                        <p>{listing.listing.country}</p> */}
+                    </div>
+                    <div>
+                        <h3 className='priceLabel'>price</h3>
+                        <p className='price'>{listing.listing.price}</p>
+                    </div>
+                    {!listing.listing.Bookings.find((booking) => booking.userId === userId) &&
+                        <div>
+                            {bookIt &&
+                                <div>
+                                    <form onSubmit={(e) => createBooking(e)}>
+                                        <label>Start Date</label>
+                                        <DatePicker
+                                            selected={startDate}
+                                            onChange={(date) => setStartDate(date)}
+                                        >
+                                        </DatePicker>
+                                        <label>End Date</label>
+                                        <DatePicker
+                                            selected={endDate}
+                                            onChange={(date) => setEndDate(date)}
+                                        >
+                                        </DatePicker>
+                                        <button type='submit'>Book it</button>
+                                    </form>
+                                    <button onClick={(e) => setBookIt(false)}>
+                                        Don't Book it
+                                    </button>
+                                </div>
+                            }
+                            {!bookIt &&
+                                <div>
+                                    <button onClick={(e) => setBookIt(true)}>
+                                        Book it
+                                    </button>
+                                </div>
+                            }
+                        </div>
+                    }
+                    {listing.listing.Bookings.find((booking) => booking.userId === userId) &&
+                        <div>
+                            <h2>Your Booking:</h2>
+                            <h3>Start Date</h3>
+                            <h4>{new Date(listing.listing.Bookings.find((booking) => booking.userId === userId).startDate).toDateString()}</h4>
+                            <h3>End Date</h3>
+                            <h4>{new Date(listing.listing.Bookings.find((booking) => booking.userId === userId).endDate).toDateString()}</h4>
+                            <form
+                                onSubmit={(e) => updateBooking(listing.listing.Bookings.find((booking) => booking.userId === userId).id)}
+                            >
+                                <label>Start Date</label>
+                                <DatePicker
+                                    selected={startDate}
+                                    onChange={(date) => setStartDate(date)}
+                                >
+                                </DatePicker>
+                                <label>End Date</label>
+                                <DatePicker
+                                    selected={endDate}
+                                    onChange={(date) => setEndDate(date)}
+                                >
+                                </DatePicker>
+
+                                <button type='submit'>Update Booking</button>
+                            </form>
+                            <button onClick={(e) => deleteBooking(listing.listing.Bookings.find((booking) => booking.userId === userId).id)}>Delete Booking</button>
+                        </div>
+                    }
+                    {!listing.listing.Reviews.find((review) => review.userId === userId) &&
+                        <form onSubmit={(e) => addReview()}>
+                            <h3>Add Review for {listing.listing.title}</h3>
+                            <label>Comment</label>
+                            <input
+                                type='text'
+                                value={comment}
+                                onChange={(e) => setComment(e.target.value)}
+                                required
+                            ></input>
+                            <label>Rating</label>
+                            <select
+                                value={rating}
+                                onChange={(e) => setRating(e.target.value)}
+                            >
+                                <option value={1}>1</option>
+                                <option value={2}>2</option>
+                                <option value={3}>3</option>
+                                <option value={4}>4</option>
+                                <option value={5}>5</option>
+                            </select>
+                            <button type='submit'>Add Review</button>
+                        </form>
+                    }
+                    {listing.listing.Reviews.map((review) => (
+                        <div>
+                            {review.userId === userId &&
+                                <form onSubmit={(e) => updateReview(e, review.id)}>
+                                    <label>Update Comment</label>
+                                    <input
+                                        type='text'
+                                        value={updateComment}
+                                        onChange={(e) => setUpdateComment(e.target.value)}
+                                        required
+                                    ></input>
+                                    <label>Rating</label>
+                                    <select
+                                        value={updateRating}
+                                        onChange={(e) => setUpdateRating(e.target.value)}
+                                    >
+                                        <option value={1}>1</option>
+                                        <option value={2}>2</option>
+                                        <option value={3}>3</option>
+                                        <option value={4}>4</option>
+                                        <option value={5}>5</option>
+                                    </select>
+                                    <button type='submit'>Update Review</button>
+                                    <button onClick={(e) => deleteReview(review.id)}>Delete Review</button>
+                                </form>
+                            }
+                        </div>
+                    ))}
+                    {listing.listing.Reviews.length &&
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>User name</th>
+                                    <th>Comment</th>
+                                    <th>Rating</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>}
-            </span>}
+                            </thead>
+                            <tbody>
+                                {listing.listing.Reviews.map((review) => (
+                                    <tr key={review.id}>
+                                        <td>{review.User.username}</td>
+                                        <td>{review.comment}</td>
+                                        <td>{review.rating}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>}
+                </span>}
+            </div>
         </div>
     )
 
