@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   Listing.associate = function(models) {
     Listing.hasMany(models.Review, {foreignKey: 'spotId'})
     Listing.hasMany(models.Image, {foreignKey: 'spotId'})
+    Listing.hasMany(models.Booking, {foreignKey: 'spotId'})
     Listing.belongsTo(models.User, {foreignKey: 'userId'})
     Listing.belongsTo(models.Type, {foreignKey: 'typeId'})
   };

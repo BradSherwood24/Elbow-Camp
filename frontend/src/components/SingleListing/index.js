@@ -6,6 +6,8 @@ import { useParams } from 'react-router-dom';
 import { getListing } from '../../store/listing'
 import * as listingActions from "../../store/listing";
 import { csrfFetch } from '../../store/csrf';
+import './index.css'
+
 
 function SingleListing() {
     let numberOfImages
@@ -18,6 +20,7 @@ function SingleListing() {
     const [imgNum, setImgNum] = useState(0)
     const [updateComment, setUpdateComment] = useState('')
     const [updateRating, setUpdateRating] = useState(5)
+    const [bookIt, setBookIt] = useState(false)
 
     useEffect(() => {
         dispatch(listingActions.fetchListing(Id))
@@ -44,8 +47,20 @@ function SingleListing() {
         })
     }
 
-    const updateReview = async () => {
+    const updateReview = async (e, id) => {
+        console.log(updateComment)
+        const spotId = Id
+        const res = await csrfFetch(`/review/update/${id}`, {
+            method: 'PATCH',
+            body: JSON.stringify({ userId, spotId, updateComment, updateRating })
+        })
+    }
 
+    const deleteReview = async (id) => {
+        const res = await csrfFetch(`/review/${id}`, {
+            method: 'DELETE',
+        })
+        window.location.reload()
     }
 
     const addImage = async (e) => {
@@ -57,6 +72,7 @@ function SingleListing() {
         const json = await res.json()
     }
 
+
     const deleteImage = async (imgId) => {
         const res = await csrfFetch(`/image/${imgId}`, {
             method: 'DELETE'
@@ -67,8 +83,7 @@ function SingleListing() {
     }
 
     const prevImg = () => {
-        console.log(numberOfImages, imgNum)
-        if (imgNum >= 0) {
+        if (imgNum > 0) {
             setImgNum(imgNum - 1)
         }
     }
@@ -88,7 +103,7 @@ function SingleListing() {
                 <h1>{listing.listing.title}</h1>
                 {listing.listing.Images.length &&
                     <div>
-                        <img src={listing.listing.Images[imgNum].imgSrc}></img>
+                        <img className='Image' src={listing.listing.Images[imgNum].imgSrc}></img>
                         <button onClick={(e) => prevImg()}>{'<'}</button>
                         <button onClick={(e) => nextImg()}>{'>'}</button>
                         {userId === listing.listing.userId &&
@@ -120,31 +135,57 @@ function SingleListing() {
                     <h3>price</h3>
                     <p>{listing.listing.price}</p>
                 </div>
-                <button>
-                    Book it
-                </button>
-                <form onSubmit={(e) => addReview()}>
-                    <h3>Add Review for {listing.listing.title}</h3>
-                    <label>Comment</label>
-                    <input
-                        type='text'
-                        value={comment}
-                        onChange={(e) => setComment(e.target.value)}
-                        required
-                    ></input>
-                    <label>Rating</label>
-                    <select
-                        value={rating}
-                        onChange={(e) => setRating(e.target.value)}
-                    >
-                        <option value={1}>1</option>
-                        <option value={2}>2</option>
-                        <option value={3}>3</option>
-                        <option value={4}>4</option>
-                        <option value={5}>5</option>
-                    </select>
-                    <button type='submit'>Add Review</button>
-                </form>
+                {bookIt &&
+                    <div>
+                        <h3>were booking it now</h3>
+                        <form>
+                            <label>Start Date</label>
+                            <input
+                            type='date'
+                            >
+                            </input>
+                            <label>End Date</label>
+                            <input
+                            type='date'
+                            >
+                            </input>
+                        </form>
+                        <button onClick={(e) => setBookIt(false)}>
+                            Don't Book it
+                        </button>
+                    </div>
+                }
+                {!bookIt &&
+                    <div>
+                        <button onClick={(e) => setBookIt(true)}>
+                            Book it
+                        </button>
+                    </div>
+                }
+                {!listing.listing.Reviews.find((review) => review.userId === userId) &&
+                    <form onSubmit={(e) => addReview()}>
+                        <h3>Add Review for {listing.listing.title}</h3>
+                        <label>Comment</label>
+                        <input
+                            type='text'
+                            value={comment}
+                            onChange={(e) => setComment(e.target.value)}
+                            required
+                        ></input>
+                        <label>Rating</label>
+                        <select
+                            value={rating}
+                            onChange={(e) => setRating(e.target.value)}
+                        >
+                            <option value={1}>1</option>
+                            <option value={2}>2</option>
+                            <option value={3}>3</option>
+                            <option value={4}>4</option>
+                            <option value={5}>5</option>
+                        </select>
+                        <button type='submit'>Add Review</button>
+                    </form>
+                }
                 {listing.listing.Reviews.length &&
                     <table>
                         <thead>
@@ -162,7 +203,7 @@ function SingleListing() {
                                     <td>{review.rating}</td>
                                     {review.userId === userId &&
                                         <td>
-                                            <form onSubmit={(e) => updateReview()}>
+                                            <form onSubmit={(e) => updateReview(e, review.id)}>
                                                 <label>Update Comment</label>
                                                 <input
                                                     type='text'
@@ -183,6 +224,7 @@ function SingleListing() {
                                                 </select>
                                                 <button type='submit'>Update Review</button>
                                             </form>
+                                            <button onClick={(e) => deleteReview(review.id)}>delete</button>
                                         </td>}
                                 </tr>
                             ))}

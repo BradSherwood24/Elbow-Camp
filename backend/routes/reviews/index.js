@@ -13,10 +13,11 @@ router.post('/create', asyncHandler(async (req, res) => {
     });
 }));
 
-router.patch('/:id', asyncHandler(async (req, res) => {
+router.patch('/update/:id', asyncHandler(async (req, res) => {
     const id = req.params.id
-    const { userId, spotId, comment, rating } = req.body;
-    const review = await Review.create({ userId, spotId, comment, rating });
+    const { userId, spotId, updateComment, updateRating } = req.body;
+    console.log(userId, spotId, updateComment, updateRating)
+    const review = await Review.create({ userId, spotId, comment: updateComment, rating: updateRating });
     const newReview = await Review.findByPk(id)
     newReview.destroy()
     return res.json({
