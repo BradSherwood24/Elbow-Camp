@@ -11,7 +11,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import './OneListing.css'
 
 
-function OneListing({ listing }) {
+function ListingPreview({ listing }) {
     const numberOfImages = listing.Images.length - 1
     const [imgNum, setImgNum] = useState(0)
     const userId = useSelector(state => state.session.user.id)
@@ -93,4 +93,4 @@ function OneListing({ listing }) {
 
 }
 
-export default OneListing;
+export default ListingPreview;
