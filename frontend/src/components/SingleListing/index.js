@@ -5,6 +5,7 @@ import { NavLink } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { getListing } from '../../store/listing'
 import * as listingActions from "../../store/listing";
+import * as reviewActions from "../../store/review"
 import { csrfFetch } from '../../store/csrf';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -25,6 +26,7 @@ function SingleListing() {
     const [bookIt, setBookIt] = useState(false)
     const [startDate, setStartDate] = useState(new Date())
     const [endDate, setEndDate] = useState(new Date())
+    const [updateYourReview, setUpdateYourReview] = useState(false)
 
     useEffect(() => {
         dispatch(listingActions.fetchListing(Id))
@@ -65,13 +67,22 @@ function SingleListing() {
         })
     }
 
-    const addReview = async () => {
+    // const addReview = async () => {
+    //     if (comment.length === 0) return
+    //     const spotId = Id
+    //     const res = await csrfFetch(`/review/create`, {
+    //         method: 'POST',
+    //         body: JSON.stringify({ userId, spotId, comment, rating })
+    //     })
+    // }
+
+    const addReview = async (e) => {
+        e.preventDefault();
         if (comment.length === 0) return
         const spotId = Id
-        const res = await csrfFetch(`/review/create`, {
-            method: 'POST',
-            body: JSON.stringify({ userId, spotId, comment, rating })
-        })
+        const Review = { userId, spotId, comment, rating, Id }
+        dispatch(reviewActions.addReview({Review}))
+        setComment('')
     }
 
     const updateReview = async (e, id) => {
@@ -121,7 +132,7 @@ function SingleListing() {
         if (imgNum < numberOfImages) {
             console.log(numberOfImages, imgNum)
             setImgNum(imgNum + 1)
-        }else {
+        } else {
             setImgNum(0)
         }
     }
@@ -170,7 +181,7 @@ function SingleListing() {
                         <p>{listing.listing.country}</p> */}
                     </div>
                     <div>
-                        <h3 className='priceLabel'>price</h3>
+                        <h3 className='priceLabel'>price per night:</h3>
                         <p className='price'>{listing.listing.price}</p>
                     </div>
                     {!listing.listing.Bookings.find((booking) => booking.userId === userId) &&
@@ -235,54 +246,71 @@ function SingleListing() {
                         </div>
                     }
                     {!listing.listing.Reviews.find((review) => review.userId === userId) &&
-                        <form onSubmit={(e) => addReview()}>
-                            <h3>Add Review for {listing.listing.title}</h3>
-                            <label>Comment</label>
-                            <input
-                                type='text'
-                                value={comment}
-                                onChange={(e) => setComment(e.target.value)}
-                                required
-                            ></input>
-                            <label>Rating</label>
-                            <select
-                                value={rating}
-                                onChange={(e) => setRating(e.target.value)}
-                            >
-                                <option value={1}>1</option>
-                                <option value={2}>2</option>
-                                <option value={3}>3</option>
-                                <option value={4}>4</option>
-                                <option value={5}>5</option>
-                            </select>
-                            <button type='submit'>Add Review</button>
-                        </form>
+                        <div>
+                            <form onSubmit={(e) => addReview(e)}>
+                                <h3>Add Review for {listing.listing.title}</h3>
+                                <label>Comment</label>
+                                <input
+                                    type='text'
+                                    value={comment}
+                                    onChange={(e) => setComment(e.target.value)}
+                                    required
+                                ></input>
+                                <label>Rating</label>
+                                <select
+                                    value={rating}
+                                    onChange={(e) => setRating(e.target.value)}
+                                >
+                                    <option value={1}>1</option>
+                                    <option value={2}>2</option>
+                                    <option value={3}>3</option>
+                                    <option value={4}>4</option>
+                                    <option value={5}>5</option>
+                                </select>
+                                <button type='submit'>Add Review</button>
+                            </form>
+                        </div>
                     }
                     {listing.listing.Reviews.map((review) => (
                         <div>
                             {review.userId === userId &&
-                                <form onSubmit={(e) => updateReview(e, review.id)}>
-                                    <label>Update Comment</label>
-                                    <input
-                                        type='text'
-                                        value={updateComment}
-                                        onChange={(e) => setUpdateComment(e.target.value)}
-                                        required
-                                    ></input>
-                                    <label>Rating</label>
-                                    <select
-                                        value={updateRating}
-                                        onChange={(e) => setUpdateRating(e.target.value)}
-                                    >
-                                        <option value={1}>1</option>
-                                        <option value={2}>2</option>
-                                        <option value={3}>3</option>
-                                        <option value={4}>4</option>
-                                        <option value={5}>5</option>
-                                    </select>
-                                    <button type='submit'>Update Review</button>
-                                    <button onClick={(e) => deleteReview(review.id)}>Delete Review</button>
-                                </form>
+                                <div>
+                                    {updateYourReview &&
+                                        <div>
+                                            <form onSubmit={(e) => updateReview(e, review.id)}>
+                                                <h3>Your Review: {review.comment}, rating: {review.rating}</h3>
+                                                <label>Update Comment</label>
+                                                <input
+                                                    type='text'
+                                                    value={updateComment}
+                                                    onChange={(e) => setUpdateComment(e.target.value)}
+                                                    required
+                                                ></input>
+                                                <label>Rating</label>
+                                                <select
+                                                    value={updateRating}
+                                                    onChange={(e) => setUpdateRating(e.target.value)}
+                                                >
+                                                    <option value={1}>1</option>
+                                                    <option value={2}>2</option>
+                                                    <option value={3}>3</option>
+                                                    <option value={4}>4</option>
+                                                    <option value={5}>5</option>
+                                                </select>
+                                                <button type='submit'>Update Review</button>
+                                                <button onClick={(e) => deleteReview(review.id)}>Delete Review</button>
+                                            </form>
+                                                <button onClick={(e) => setUpdateYourReview(false)}>Don't Edit Review</button>
+                                        </div>
+                                    }
+                                    {!updateYourReview &&
+                                        <div>
+                                            <button onClick={(e) => setUpdateYourReview(true)}>
+                                                Edit Review?
+                                            </button>
+                                        </div>
+                                    }
+                                </div>
                             }
                         </div>
                     ))}

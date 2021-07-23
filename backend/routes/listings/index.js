@@ -33,12 +33,12 @@ router.delete('/delete/:id', asyncHandler(async (req, res) => {
 router.get('/ten', asyncHandler(async (req, res) => {
     const listing = await Listing.findAll({
         orderBy: 'createdAt',
-        limit: 10,
         include: [
-            { model: Image },
+            { model: Image},
             { model: Review },
             { model: Booking }
-        ]
+        ],
+        limit: 10,
     })
     return res.json({
         listing

@@ -64,7 +64,7 @@ function OneListing({ listing }) {
                 <p>{listing.address}, {listing.city}, {listing.state}, {listing.country}</p>
             </div>
             <div>
-                <h3 className='priceLabel'>price:</h3>
+                <h3 className='priceLabel'>price per night:</h3>
                 <p className='price'>${listing.price}</p>
             </div>
             <div className='toListingDiv'>

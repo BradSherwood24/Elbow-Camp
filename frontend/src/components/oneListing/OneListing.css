@@ -26,6 +26,8 @@
 
 .imgSelect {
     width: 40%;
+    font-weight: bold;
+    font-size: 20px;
 }
 
 .changeImg {
