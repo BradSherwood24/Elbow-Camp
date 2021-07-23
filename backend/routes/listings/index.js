@@ -23,7 +23,24 @@ router.patch('/patch/:id', asyncHandler(async (req, res) => {
 
 router.delete('/delete/:id', asyncHandler(async (req, res) => {
     const id = req.params.id
-    const listing = await Listing.findByPk(id)
+    const listing = await Listing.findByPk(id , {
+        include: [
+            { model: Image },
+            { model: Booking },
+            { model: Review},
+        ]})
+    // const images = listing.Images
+    // images.forEach(image => {
+    //     image.destroy()
+    // });
+    // const reviews = listing.Rmages
+    // reviews.forEach(review => {
+    //     review.destroy()
+    // });
+    // const bookings = listing.Bookings
+    // bookings.forEach(booking => {
+    //     booking.destroy()
+    // });
     listing.destroy()
     return res.json({
         destroy: true

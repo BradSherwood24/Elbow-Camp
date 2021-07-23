@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     imgSrc: DataTypes.TEXT
   }, {});
   Image.associate = function(models) {
-    Image.belongsTo(models.Listing, {foreignKey: 'spotId'})
+    Image.belongsTo(models.Listing, {foreignKey: 'spotId', onDelete: 'cascade'})
   };
   return Image;
 };

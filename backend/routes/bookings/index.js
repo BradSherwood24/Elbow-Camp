@@ -35,8 +35,8 @@ router.patch('/:id', asyncHandler(async (req, res) => {
 
 router.delete('/:id', asyncHandler(async (req, res) => {
     const id = req.params.id
-    const booking = Booking.findByPk(id)
-    booking.destroy()
+    const oldbooking = await Booking.findByPk(id)
+    oldbooking.destroy()
     return res.json({
         Destroy: true,
     });
