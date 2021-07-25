@@ -18,7 +18,7 @@ function ListingPreview({ listing }) {
 
     return (
         <div className='preview'>
-            <a href={`/listing/${listing.id}`}>
+            <a href={`/listingDetail/${listing.id}`}>
                 <h1 className='previewTitle'>{listing.title}</h1>
                 {listing.Images.length &&
                     <div>

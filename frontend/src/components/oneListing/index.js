@@ -75,7 +75,7 @@ function OneListing({ listing }) {
             </div>
             <div className='toListingDiv'>
                 <button className='toListing'>
-                    <NavLink className='NavLink' to={`/listing/${listing.id}`}>go to listing</NavLink>
+                    <NavLink className='NavLink' to={`/listingDetail/${listing.id}`}>go to listing</NavLink>
                 </button>
                 {!listings.isHome &&
                     <div>

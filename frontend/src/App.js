@@ -33,7 +33,7 @@ function App() {
           <Route path='/new-listing'>
             <CreateListing />
           </Route>
-          <Route path='/listing/:id'>
+          <Route path='/listingDetail/:id'>
             <SingleListing />
           </Route>
           <Route path='/edit/:id'>
