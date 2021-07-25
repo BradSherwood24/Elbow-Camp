@@ -15,8 +15,8 @@ function Navigation({ isLoaded }) {
   } else {
     sessionLinks = (
       <>
-        <NavLink to="/login">Log In</NavLink>
-        <NavLink to="/signup">Sign Up</NavLink>
+        <NavLink className="profile fa fa-login" to="/login"> Log In </NavLink>
+        <NavLink className="profile" to="/signup"> Sign Up </NavLink>
       </>
     );
   }
@@ -25,7 +25,7 @@ function Navigation({ isLoaded }) {
     <div className='header'>
       <ul>
         <li>
-          <NavLink exact to="/">Home</NavLink>
+          <NavLink className="profile fa fa-home" exact to="/"></NavLink>
           {isLoaded && sessionLinks}
         </li>
       </ul>

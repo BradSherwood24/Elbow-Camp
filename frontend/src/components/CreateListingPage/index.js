@@ -20,17 +20,18 @@ function CreateListing() {
     const [lat, setlat] = useState('');
     const [long, setLong] = useState('');
     const [price, setPrice] = useState(100);
+    const [image, setImage] = useState('')
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        dispatch(listingActions.createListing({ title, userId, typeId, address, city, state, country, price }))
-        window.location = '/profile'
+        const imgSrc = image
+        dispatch(listingActions.createListing({ title, userId, typeId, address, city, state, country, price, imgSrc }))
+        window.location='/profile'
     }
 
     return (
         <div>
-            <h1>hello from make listing</h1>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={(e) => handleSubmit(e)}>
                 <label>Title of listing
                     <input
                         type='text'
@@ -87,7 +88,15 @@ function CreateListing() {
                     <input
                         type='number'
                         value={price}
-                        onChange={(e) => setPrice(e.target.price)}
+                        onChange={(e) => setPrice(e.target.value)}
+                        required
+                    />
+                </label>
+                <label>Cover Image
+                    <input
+                        type='text'
+                        value={image}
+                        onChange={(e) => setImage(e.target.value)}
                         required
                     />
                 </label>

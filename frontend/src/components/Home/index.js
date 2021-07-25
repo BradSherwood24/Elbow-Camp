@@ -6,6 +6,7 @@ import { csrfFetch } from '../../store/csrf';
 import * as listingActions from "../../store/listing";
 import './home.css'
 import OneListing from '../oneListing';
+import ListingPreview from '../ListingPreview';
 
 
 function HomePage() {
@@ -44,11 +45,12 @@ function HomePage() {
 
     return (
         <div className='backGround'>
-            <h1>hello {userName}</h1>
             {!listingArrs.length && <span>Loading</span>}
-            <div className='Containing'>
+            <h1 className='newestListings'>Our Newest Listings:</h1>
+            <div className='ContainingHome'>
                 {listingArrs.length && listings.listings.map((listing) =>
-                    <OneListing listing={listing} />
+                    // <OneListing listing={listing} />
+                    <ListingPreview listing={listing} />
                     // <span>
                     //     <h1>{listing.title}</h1>
                     //     {listing.Images.length &&

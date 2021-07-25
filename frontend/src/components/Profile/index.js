@@ -4,6 +4,7 @@ import { Redirect } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 import { csrfFetch } from '../../store/csrf';
 import OneListing from '../oneListing';
+import CreateListing from '../CreateListingPage';
 import './profile.css'
 import * as listingActions from "../../store/listing";
 
@@ -12,6 +13,7 @@ function Profile() {
     const dispatch = useDispatch()
     const userId = useSelector(state => state.session.user.id)
     const [image, setImage] = useState('')
+    const [create, setCreate] = useState(false)
 
     useEffect(() => {
         dispatch(listingActions.fetchListings(userId))
@@ -35,13 +37,30 @@ function Profile() {
     return (
         <div >
             {!listingArrs.length && <span>You have no listings</span>}
-            <h1>Your Listings</h1>
-            <button>
-                <NavLink className='NavLink' to='/new-listing'>create a listing</NavLink>
-            </button>
+            {!create &&
+                <button onClick={(e) => setCreate(true)}>
+                    Create a Listing
+                    {/* <NavLink className='NavLink' to='/new-listing'>create a listing</NavLink> */}
+                </button>
+            }
+            {create &&
+                <div>
+                    <button onClick={(e) => setCreate(false)}>
+                        Don't Create Listing
+                        {/* <NavLink className='NavLink' to='/new-listing'>Don't Create Listing</NavLink> */}
+                    </button>
+                    <CreateListing />
+                </div>
+            }
+
             {listingArrs.length && listings.listings.map((listing) =>
-                <div className='Containing'>
-                    <OneListing listing={listing} />
+                <div>
+                    <h1>Your Listings</h1>
+                    {listing.userId === userId &&
+                        <div className='Containing'>
+                            <OneListing listing={listing} />
+                        </div>
+                    }
                 </div>
             )}
         </div>

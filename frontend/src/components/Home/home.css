@@ -1,13 +1,19 @@
-.Containing {
+.ContainingHome {
     width: 100%;
-    display: grid;
-    justify-content: center;
+    display: flex;
+    overflow-x: scroll;
+    background: linear-gradient(#fd5e53, #FFC132);
+    /* background-color: blanchedalmond; */
 }
 
 .backGround {
     /* background: linear-gradient(#fd5e53, #FFC132); */
     /* background-image: url('../../images/BackGround2.jpg'); */
     margin: 0px;
+}
+
+.newestListings {
+
 }
 
 /* .coverImg {

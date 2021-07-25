@@ -87,7 +87,7 @@ export const deleteListing = ({id, reviews, bookings, images, userId}) => async 
 export const createListing = (listing) => async (dispatch) => {
     try {
         const token = Cookies.get('XSRF-TOKEN')
-        const { title, userId, typeId, address, city, state, country, price } = listing
+        const { title, userId, typeId, address, city, state, country, price, imgSrc } = listing
         const res = await csrfFetch('/listing/create', {
             method: 'POST',
             headers: {
@@ -106,6 +106,11 @@ export const createListing = (listing) => async (dispatch) => {
             })
         })
         const json = await res.json()
+        const Id = json.listing.id
+        const Image = await csrfFetch(`/image/create/${Id}`, {
+            method: 'POST',
+            body: JSON.stringify({ imgSrc })
+        })
         dispatch(addListing(json))
         return json
     } catch (e) {
