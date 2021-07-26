@@ -109,9 +109,15 @@ function SingleListing() {
 
     const deleteImage = async (e, imgId) => {
         e.preventDefault()
-        dispatch(listingActions.deleteImage({ imgId, Id }))
-        numberOfImages--
-        setImgNum(imgNum -1)
+        if(numberOfImages !== 0) {
+            dispatch(listingActions.deleteImage({ imgId, Id }))
+            if(imgNum === 0) {
+                setImgNum(0)
+            }else {
+                setImgNum(imgNum -1)
+            }
+            numberOfImages--
+        }
     }
 
     const prevImg = () => {

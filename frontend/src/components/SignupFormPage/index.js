@@ -28,6 +28,14 @@ function SignupFormPage() {
         return setErrors(['Confirm Password field must be the same as the Password field']);
     };
 
+    const demologin = () => {
+        return dispatch(sessionActions.login({ credential:'DemoUser', password:'Password!' }))
+            .catch(async (res) => {
+                const data = await res.json();
+                if (data && data.errors) setErrors(data.errors);
+            });
+    }
+
     return (
         <form onSubmit={handleSubmit}>
             <ul>
@@ -69,6 +77,7 @@ function SignupFormPage() {
                     required
                 />
             </label>
+            <button onClick={(e) => demologin()}>Demo User</button>
             <button type="submit">Sign Up</button>
         </form>
     );

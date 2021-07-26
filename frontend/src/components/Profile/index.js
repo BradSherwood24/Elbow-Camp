@@ -49,13 +49,13 @@ function Profile() {
                         Don't Create Listing
                         {/* <NavLink className='NavLink' to='/new-listing'>Don't Create Listing</NavLink> */}
                     </button>
-                    <CreateListing />
+                    <CreateListing setCreate={setCreate} />
                 </div>
             }
 
+            <h1>Your Listings</h1>
             {listingArrs.length && listings.listings.map((listing) =>
                 <div>
-                    <h1>Your Listings</h1>
                     {listing.userId === userId &&
                         <div className='Containing'>
                             <OneListing listing={listing} />

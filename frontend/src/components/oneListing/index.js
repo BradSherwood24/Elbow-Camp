@@ -52,7 +52,7 @@ function OneListing({ listing }) {
             <h1 className='title'>{listing.title}</h1>
             {listing.Images.length &&
                 <div>
-                    <a href={`/listing/${listing.id}`}>
+                    <a href={`/listingDetail/${listing.id}`}>
                         <img className='Image' src={listing.Images[imgNum].imgSrc}></img>
                     </a>
                 </div>}

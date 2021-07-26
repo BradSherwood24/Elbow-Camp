@@ -6,7 +6,7 @@ import Cookies from 'js-cookie';
 import * as listingActions from "../../store/listing";
 
 
-function CreateListing() {
+function CreateListing({setCreate}) {
     const dispatch = useDispatch()
 
     const userId = useSelector(state => state.session.user.id)
@@ -26,7 +26,6 @@ function CreateListing() {
         e.preventDefault()
         const imgSrc = image
         dispatch(listingActions.createListing({ title, userId, typeId, address, city, state, country, price, imgSrc }))
-        window.location='/profile'
     }
 
     return (
