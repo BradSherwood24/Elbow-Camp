@@ -111,11 +111,31 @@ export const createListing = (listing) => async (dispatch) => {
             method: 'POST',
             body: JSON.stringify({ imgSrc })
         })
-        dispatch(addListing(json))
+        dispatch(fetchListings(userId))
         return json
     } catch (e) {
         console.log('error', e)
     }
+}
+
+export const updateListing = ({Id, images, bookings, reviews, newListing}) => async (dispatch) => {
+    reviews.forEach(review => {
+        dispatch(deleteOneReview(review.id))
+    });
+    bookings.forEach(booking => {
+        dispatch(deleteOneBooking(booking.id))
+    });
+    images.forEach(image => {
+        dispatch(deleteOneImage(image.id))
+    });
+    const res = await csrfFetch(`/listing/delete/${Id}`, {
+        method: "DELETE"
+    })
+    const json = await res.json()
+    const listing = {...newListing}
+    console.log('listing', listing)
+    dispatch(createListing(listing))
+    return json
 }
 
 export const addReview = (Review) => async (dispatch) => {

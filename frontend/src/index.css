@@ -18,6 +18,14 @@ button {
     margin: 5px;
   }
 
+  table {
+	  background-color: #d9d3c6;
+	  width: 500px;
+	  text-align: center;
+	  border: 3px solid black;
+  }
+
+
 
   form{
 	font: 95% Arial, Helvetica, sans-serif;
@@ -41,7 +49,6 @@ input[type="date"],
 input[type="email"],
 input[type="number"],
 input[type="search"],
-
 textarea,
 select
 {

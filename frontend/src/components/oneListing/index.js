@@ -9,6 +9,7 @@ import { csrfFetch } from '../../store/csrf';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import './OneListing.css'
+import EditListing from '../EditPage';
 
 
 function OneListing({ listing }) {
@@ -33,7 +34,7 @@ function OneListing({ listing }) {
         const images = listing.Images
         const bookings = listing.Bookings
         const reviews = listing.Reviews
-        dispatch(listingActions.deleteListing({id, images, bookings, reviews, userId}))
+        dispatch(listingActions.deleteListing({ id, images, bookings, reviews, userId }))
         // window.location = '/profile'
     }
 
@@ -82,9 +83,9 @@ function OneListing({ listing }) {
                         <button
                             onClick={(e) => deleteListing(listing.id, e)}
                         >Delete</button>
-                        <button>
-                            <NavLink className='NavLink' to={`/edit/${listing.id}`}>edit</NavLink>
-                        </button>
+
+                        <EditListing listing={listing} />
+
                     </div>
                 }
             </div>

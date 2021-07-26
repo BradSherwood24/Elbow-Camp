@@ -353,6 +353,7 @@ function SingleListing() {
                             }
                         </div>
                     ))}
+                    <h2>Reviews:</h2>
                     {listing.listing.Reviews.length &&
                         <table>
                             <thead>
@@ -364,7 +365,7 @@ function SingleListing() {
                             </thead>
                             <tbody>
                                 {listing.listing.Reviews.map((review) => (
-                                    <tr key={review.id}>
+                                    <tr key={review.id} className='row'>
                                         <td>{review.User.username}</td>
                                         <td>{review.comment}</td>
                                         <td>{review.rating}</td>
